@@ -1,0 +1,76 @@
+﻿@page "/"
+@inject BlobServiceClient blobServiceClient
+@rendermode InteractiveServer
+
+
+<h3>
+    Photos
+</h3>
+
+<div class="add-photo-button">
+    <label class="btn btn-primary" for="fileUpload">+</label>
+    <InputFile id="fileUpload" OnChange="UploadFile" hidden accept=".png, .jpg, .jpeg"/>
+</div>
+
+@if (imageUrls.Count == 0)
+{
+    <p>Loading...</p>
+}
+else
+{
+    @foreach (var url in imageUrls)
+    {
+        <img src="@url" class="photo-thumbnail animated-image" />
+    }
+}
+
+@code {
+    private List<string> imageUrls = new();
+    private int currentCount = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Retrieve the blobs
+        var containerClient = blobServiceClient.GetBlobContainerClient("photos");
+        foreach (var blobItem in containerClient.GetBlobs())
+        {
+            var blobClient = containerClient.GetBlobClient(blobItem.Name);
+            var uri = blobClient.Uri.ToString();
+            imageUrls.Add(uri);
+        }
+    }
+
+    private async Task UploadFile(InputFileChangeEventArgs e)
+    {
+            Console.WriteLine("UploadFile triggered");
+         System.Diagnostics.Debugger.Break(); // Will trigger breakpoint if debugger is attached
+
+        if (e.FileCount == 0) return;
+            
+        var file = e.File;
+        var containerClient = blobServiceClient.GetBlobContainerClient("photos");
+
+        try
+        {
+            await containerClient.CreateIfNotExistsAsync();
+
+            var blobClient = containerClient.GetBlobClient(file.Name);
+
+            using var stream = file.OpenReadStream(10 * 1024 * 1024); // 10 MB max
+            await blobClient.UploadAsync(stream, overwrite: true);
+
+            Console.WriteLine($"Uploaded: {file.Name}");
+
+            // Add the uploaded image to the UI
+            imageUrls.Add(blobClient.Uri.ToString());
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Upload failed: {ex.Message}");
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+}
