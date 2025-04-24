@@ -9,9 +9,10 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddAzureClients(clientBuilder =>
 {
-    clientBuilder.AddBlobServiceClient(builder.Configuration["StorageConnectionLocal:blobServiceUri"]!);
-    clientBuilder.AddQueueServiceClient(builder.Configuration["StorageConnectionLocal:queueServiceUri"]!);
-    clientBuilder.AddTableServiceClient(builder.Configuration["StorageConnectionLocal:tableServiceUri"]!);
+    var conncetionString = builder.Configuration["StorageConnectionString"] ?? "UseDevelopmentStorage=true;";
+    clientBuilder.AddBlobServiceClient(conncetionString);
+    clientBuilder.AddQueueServiceClient(conncetionString);
+    clientBuilder.AddTableServiceClient(conncetionString);
 });
 
 WebApplication app = builder.Build();
