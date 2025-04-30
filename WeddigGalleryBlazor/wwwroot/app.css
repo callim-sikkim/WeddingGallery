@@ -17,9 +17,12 @@ a, .btn-link {
     color: #fff;
     background-color: #6b9d3ee5;
     border-color: #629039ff;
-    border-radius: 50%;
-    !important;
+    border-radius: 50%; !important;
     box-shadow: 0 5px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: #4b682eff;
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {

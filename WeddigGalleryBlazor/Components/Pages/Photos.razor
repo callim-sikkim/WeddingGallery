@@ -1,7 +1,7 @@
 ﻿@page "/"
 @inject BlobServiceClient blobServiceClient
 @rendermode InteractiveServer
-
+@inherits LayoutComponentBase
 
 <h3>
     Photos
@@ -32,7 +32,7 @@ else
     {
         // Retrieve the blobs
         var containerClient = blobServiceClient.GetBlobContainerClient("photos");
-        foreach (var blobItem in containerClient.GetBlobs())
+        await foreach (var blobItem in containerClient.GetBlobsAsync())
         {
             var blobClient = containerClient.GetBlobClient(blobItem.Name);
             var uri = blobClient.Uri.ToString();
@@ -42,9 +42,6 @@ else
 
     private async Task UploadFile(InputFileChangeEventArgs e)
     {
-            Console.WriteLine("UploadFile triggered");
-         System.Diagnostics.Debugger.Break(); // Will trigger breakpoint if debugger is attached
-
         if (e.FileCount == 0) return;
             
         var file = e.File;
@@ -73,4 +70,6 @@ else
             StateHasChanged();
         }
     }
+
+
 }
