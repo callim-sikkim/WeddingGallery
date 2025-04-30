@@ -4,9 +4,8 @@
 @inherits LayoutComponentBase
 
 <h3>
-    Photos
+    <img class="top-row" src="stopka.png" />
 </h3>
-
 <div class="add-photo-button">
     <label class="btn btn-primary" for="fileUpload">+</label>
     <InputFile id="fileUpload" OnChange="UploadFile" hidden accept=".png, .jpg, .jpeg"/>
@@ -20,13 +19,21 @@ else
 {
     @foreach (var url in imageUrls)
     {
-        <img src="@url" class="photo-thumbnail animated-image" />
+        @if(url != isMaximaized)
+        {
+            <img src="@url" @onclick="() => SetImageMax(url)" class="photo-thumbnail animated-image" />
+        }
+        else
+        {
+            <img src="@url" @onclick="() => SetImageMax(url)" class="photo-thumbnail-maximaized animated-image" />
+        }
     }
 }
 
 @code {
     private List<string> imageUrls = new();
     private int currentCount = 0;
+    private string isMaximaized = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,7 +50,7 @@ else
     private async Task UploadFile(InputFileChangeEventArgs e)
     {
         if (e.FileCount == 0) return;
-            
+
         var file = e.File;
         var containerClient = blobServiceClient.GetBlobContainerClient("photos");
 
@@ -71,5 +78,13 @@ else
         }
     }
 
+
+    private void SetImageMax(string url)
+    {
+        if (isMaximaized == url)
+            isMaximaized = string.Empty;
+        else
+            isMaximaized = url;
+    }
 
 }

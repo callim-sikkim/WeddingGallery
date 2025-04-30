@@ -21,6 +21,12 @@ a, .btn-link {
     box-shadow: 0 5px 6px rgba(0, 0, 0, 0.2);
 }
 
+.top-row {
+    width: 25%; !important;
+    height: 25%; !important;
+    margin-left: 38% !important;
+}
+
 .btn-primary:hover {
     background-color: #4b682eff;
 }
@@ -81,6 +87,12 @@ h1:focus {
     z-index: 10;
 }
 
+.photo-thumbnail-maximaized {
+    width: 100% !important;
+    height: 100% !important;
+
+}
+
 .animated-image {
     animation: fadeIn 1s forwards;
 }
@@ -106,4 +118,5 @@ h1:focus {
     margin-bottom: 5px;
     bottom: 0;
     right: 0;
+    z-index: 11;
 }
