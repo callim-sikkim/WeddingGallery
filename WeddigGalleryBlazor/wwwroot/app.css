@@ -22,9 +22,9 @@ a, .btn-link {
 }
 
 .top-row {
-    width: 25%; !important;
-    height: 25%; !important;
-    margin-left: 38% !important;
+    display: block;
+    margin: auto;
+    width: 25%;
 }
 
 .btn-primary:hover {
