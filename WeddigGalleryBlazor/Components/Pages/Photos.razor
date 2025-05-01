@@ -13,7 +13,7 @@
 
 @if (imageUrls.Count == 0)
 {
-    <p>Loading...</p>
+    <p>@monit</p>
 }
 else
 {
@@ -34,10 +34,10 @@ else
     private List<string> imageUrls = new();
     private int currentCount = 0;
     private string isMaximaized = string.Empty;
+    private string monit = "Loading...";
 
     protected override async Task OnInitializedAsync()
     {
-        // Retrieve the blobs
         var containerClient = blobServiceClient.GetBlobContainerClient("photos");
         await foreach (var blobItem in containerClient.GetBlobsAsync())
         {
@@ -45,6 +45,7 @@ else
             var uri = blobClient.Uri.ToString();
             imageUrls.Add(uri);
         }
+        monit = "Brak zdjęć";
     }
 
     private async Task UploadFile(InputFileChangeEventArgs e)
